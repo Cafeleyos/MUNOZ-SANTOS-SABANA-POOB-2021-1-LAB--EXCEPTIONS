@@ -50,12 +50,13 @@ public abstract class BankAccount {
      * @param amount amount to withdraw
      * @return if the operation was successful.
      */
-    public boolean withdraw(double amount) {
+    public boolean withdraw(double amount) throws BankAccountException {
         if (amount<this.balance) {
-            if(amount + calculateTax(amount)<=balance) {
-                this.balance = balance- (amount+calculateTax(amount));
-                return true;
-            }
+            throw new BankAccountException(BankAccountException.LOW_AMOUNT_OF_MONEY);
+        }
+        if(amount + calculateTax(amount)<=balance) {
+            this.balance = balance- (amount+calculateTax(amount));
+            return true;
         }
         return false;
     }

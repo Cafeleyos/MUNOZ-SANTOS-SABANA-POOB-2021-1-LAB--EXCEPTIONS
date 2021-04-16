@@ -44,10 +44,10 @@ public class ColsubsidioFund implements IFamilyCompensationFund {
     @Override
     public boolean deleteEmployee(UUID id) throws FamilyCompensationFundException {
         boolean result = false;
-        Employee e;
+        Employee e = registeredEmployees.get(id);
 
-        e = registeredEmployees.get(id);
         result = registeredEmployees.remove(id, e);
+
         if(!result) {
             throw new FamilyCompensationFundException(FamilyCompensationFundException.EMPLOYEE_IS_NOT_REGISTERED);
         }

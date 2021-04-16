@@ -159,7 +159,7 @@ public class SabanaPayroll {
                         try {
                             result = fcf.registerEmployee(d.getEmployees().get(i));
                         } catch (FamilyCompensationFundException e) {
-                            e.printStackTrace();
+                            result = false;
                         }
                     }
                     break;

@@ -43,7 +43,7 @@ public class SavingsTest {
     }
 
     @Test
-    public void ShouldWithdrawMoneyIfPossible() {
+    public void ShouldWithdrawMoneyIfPossible() throws BankAccountException {
         Savings account = new Savings();
         account.deposit(7000); //5000
         assertTrue(account.withdraw(3000));
