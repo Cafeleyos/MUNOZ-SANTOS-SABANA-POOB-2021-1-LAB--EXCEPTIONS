@@ -45,22 +45,23 @@ public class CafamFundTest {
 
     @Test
     @DisplayName("GIVEN a employee by salary WHEN try to register THEN success")
-    public void shouldRegisterEmployee() {
+    public void shouldRegisterEmployee() throws FamilyCompensationFundException {
 
         assertTrue(cafamFund.registerEmployee(EmployeeForCommission));
     }
 
     @Test
     @DisplayName("GIVEN a employee by salary registered WHEN try to register again THEN fails")
-    public void shouldNotRegisterEmployeeWhenDuplicated() {
+    public void shouldNotRegisterEmployeeWhenDuplicated() throws FamilyCompensationFundException {
 
         assertTrue(cafamFund.registerEmployee(EmployeeForSalary));
-        assertFalse(cafamFund.registerEmployee(EmployeeForSalary));
+        Exception e = assertThrows(FamilyCompensationFundException.class, () -> cafamFund.registerEmployee(EmployeeForSalary));
+        assertEquals(FamilyCompensationFundException.EMPLOYEE_REGISTERED, e.getMessage());
     }
 
     @Test
     @DisplayName("GIVEN a employee by salary registered WHEN try to delete THEN success")
-    public void shouldDeleteEmployee() {
+    public void shouldDeleteEmployee() throws FamilyCompensationFundException {
 
         assertTrue(cafamFund.registerEmployee(EmployeeForSalary));
         assertTrue(cafamFund.deleteEmployee(EmployeeForSalary.getId()));
@@ -68,14 +69,15 @@ public class CafamFundTest {
 
     @Test
     @DisplayName("GIVEN a employee by salary not registered WHEN try to delete THEN fails")
-    public void shouldNotDeleteEmployee() {
+    public void shouldNotDeleteEmployee() throws FamilyCompensationFundException {
 
-        assertFalse(cafamFund.deleteEmployee(EmployeeForSalary.getId()));
+        Exception e = assertThrows(FamilyCompensationFundException.class, () -> cafamFund.deleteEmployee(EmployeeForSalary.getId()));
+        assertEquals(FamilyCompensationFundException.EMPLOYEE_IS_NOT_REGISTERED, e.getMessage());
     }
 
     @Test
     @DisplayName("GIVEN a employee by salary registered WHEN try to validate is registered THEN success")
-    public void shouldValidateEmployeeIsRegistered() {
+    public void shouldValidateEmployeeIsRegistered() throws FamilyCompensationFundException {
 
         assertTrue(cafamFund.registerEmployee(EmployeeForHours));
         assertTrue(cafamFund.isEmployeeRegistered(EmployeeForHours.getId()));

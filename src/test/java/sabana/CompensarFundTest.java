@@ -47,29 +47,31 @@ public class CompensarFundTest {
 
     @Test
     @DisplayName("GIVEN a employee by salary WHEN try to register THEN success")
-    public void shouldRegisterEmployee() {
+    public void shouldRegisterEmployee() throws FamilyCompensationFundException {
 
         assertTrue(compensarFund.registerEmployee(EmployeeForSalary2));
     }
 
     @Test
     @DisplayName("GIVEN a employee by hours WHEN try to register THEN fails")
-    public void shouldNotRegisterEmployeeWhenByCommission() {
+    public void shouldNotRegisterEmployeeWhenByCommission() throws FamilyCompensationFundException {
 
-        assertFalse(compensarFund.registerEmployee(EmployeeForHours));
+        Exception e = assertThrows(FamilyCompensationFundException.class, () -> compensarFund.registerEmployee(EmployeeForHours));
+        assertEquals(FamilyCompensationFundException.EMPLOYEE_NOT_ALLOWED, e.getMessage());
     }
 
     @Test
     @DisplayName("GIVEN a employee by salary registered WHEN try to register again THEN fails")
-    public void shouldNotRegisterEmployeeWhenDuplicated() {
+    public void shouldNotRegisterEmployeeWhenDuplicated() throws FamilyCompensationFundException {
 
         assertTrue(compensarFund.registerEmployee(EmployeeForSalary));
-        assertFalse(compensarFund.registerEmployee(EmployeeForSalary));
+        Exception e = assertThrows(FamilyCompensationFundException.class, () -> compensarFund.registerEmployee(EmployeeForSalary));
+        assertEquals(FamilyCompensationFundException.EMPLOYEE_REGISTERED, e.getMessage());
     }
 
     @Test
     @DisplayName("GIVEN a employee by salary registered WHEN try to delete THEN success")
-    public void shouldDeleteEmployee() {
+    public void shouldDeleteEmployee() throws FamilyCompensationFundException {
 
         assertTrue(compensarFund.registerEmployee(EmployeeForSalary));
         assertTrue(compensarFund.deleteEmployee(EmployeeForSalary.getId()));
@@ -77,14 +79,15 @@ public class CompensarFundTest {
 
     @Test
     @DisplayName("GIVEN a employee by salary not registered WHEN try to delete THEN fails")
-    public void shouldNotDeleteEmployee() {
+    public void shouldNotDeleteEmployee() throws FamilyCompensationFundException {
 
-        assertFalse(compensarFund.deleteEmployee(EmployeeForSalary.getId()));
+        Exception e = assertThrows(FamilyCompensationFundException.class, () -> compensarFund.deleteEmployee(EmployeeForSalary.getId()));
+        assertEquals(FamilyCompensationFundException.EMPLOYEE_IS_NOT_REGISTERED, e.getMessage());
     }
 
     @Test
     @DisplayName("GIVEN a employee by salary registered WHEN try to validate is registered THEN success")
-    public void shouldValidateEmployeeIsRegistered() {
+    public void shouldValidateEmployeeIsRegistered() throws FamilyCompensationFundException {
 
         assertTrue(compensarFund.registerEmployee(EmployeeForCommission));
         assertTrue(compensarFund.isEmployeeRegistered(EmployeeForCommission.getId()));

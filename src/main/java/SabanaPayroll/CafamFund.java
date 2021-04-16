@@ -14,20 +14,17 @@ public class CafamFund implements IFamilyCompensationFund {
      * @return if it was registered
      */
     @Override
-    public boolean registerEmployee(Employee employee) {
-        boolean result = true;
+    public boolean registerEmployee(Employee employee) throws FamilyCompensationFundException {
 
         for(Employee e : registeredEmployee) {
             if(employee.getId() == e.getId()){
-                result = false;
-                break;
+                throw new FamilyCompensationFundException(FamilyCompensationFundException.EMPLOYEE_REGISTERED);
             }
         }
-        if(result) {
-            registeredEmployee.add(employee);
-        }
 
-        return result;
+        registeredEmployee.add(employee);
+
+        return true;
     }
 
     /**
@@ -36,7 +33,7 @@ public class CafamFund implements IFamilyCompensationFund {
      * @return if it was removed
      */
     @Override
-    public boolean deleteEmployee(UUID id) {
+    public boolean deleteEmployee(UUID id) throws FamilyCompensationFundException {
         boolean result = false;
 
         for(Employee e : registeredEmployee) {
@@ -45,6 +42,9 @@ public class CafamFund implements IFamilyCompensationFund {
                 result = true;
                 break;
             }
+        }
+        if(!result) {
+            throw new FamilyCompensationFundException(FamilyCompensationFundException.EMPLOYEE_IS_NOT_REGISTERED);
         }
 
         return result;

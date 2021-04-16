@@ -1,113 +1,82 @@
-# LAB-INTERFACES
+# LAB-EXCEPTIONS
 
 ## Dependencias
 
 * Laboratorio de clases abstractas.
 * Laboratorio de herencia.
+* Laboratorio de interfaces.
 
-## Parte I - Entendiendo las Interfaces `Shapes`
+## Parte I - Entendiendo las Excepciones
 
-* Use la implementación que realizo a lo largo de los laboratorios de herencia y clases abstratas para lograr que las pruebas de `CircleTest` pasen de forma efectiva.
-* Lea atentamente el siguiente diagrama y responda:
-    * ¿Cuál es la relación entre `Circle` y `Shape`?
-    * ¿Cuál es la relación entre `Cylinder` y `Shape`?
-    * ¿Cuál es la relación entre `Circle` y `GeometricShape2D`?
-    * ¿Cuál es la relación entre `Cylinder` y `GeometricShape3D`?
+Actualmente tenemos un problema en nuestro caso de estudio de las figuras geométricas, es posible crear figuras con medidas negativas o iguales a cero, lo cual no debería ser posible. Fíjese en la implementación del constructor de la clase `Circle`, en el hacemos una validación para evitar la creación de círculos con radios negativos o iguales a 0.
 
-![](img/shapes-init-class-diagram.svg)
+```java
+    public Circle(double radius) throws ShapeException {
 
-* Lea atentamente las clases `Circle`, `Cylinder`, `GeometricShape2D`, `GeometricShape3D` y `Shape`.
-* Use la implementación de los métodos de `getArea` y `getPerimeter` que realizo en el laboratorio de herencia para completar la implementación de `Circle`.
-* Verifique que todas las pruebas de `CircleTest` pasen de forma efectiva.
-* Para la clase `Cylinder`, sobreescriba el método `getVolume` de tal forma que todas las pruebas de la clase `CylinderTest` para ese método pasen. Agrege pruebas adicionales.
-* Para la clase `Cylinder`, sobreescriba el método `getSuperficialArea` de tal forma que todas las pruebas de la clase `CylinderTest` para ese método pasen. Agrege pruebas adicionales.
-* Tome una captura de pantalla como evidencia de las pruebas que logro ejecutar de forma exitosa.
+        if (radius <= 0)
+            throw new ShapeException(ShapeException.BAD_DIMENSION_SIDE);
 
-## Parte II - Implementando Interfaces
+        this.radius = radius;
+    }
+``` 
 
-![](img/shapes-design-class-diagram.svg)
+Ahora revise estas pruebas que validan ese comportamiento.
 
-En el diagrama anterior se definen las clases `Triangle`, `Pyramid`, `Rectangle`, `RectangleSolid` y `Cube`.
+```java
+    @Test
+    public void shouldNorCreateCircleWithRadiusNegative() {
 
-### Implementando `GeometricShape2D`
+        try {
+            new Circle(-1);
+        } catch (ShapeException e) {
+            assertEquals(ShapeException.BAD_DIMENSION_SIDE, e.getMessage());
+        }
+    }
 
-* Cree las clases `Triangle` y `Rectangle`. 
-* Haga que las clases hereden de `Shape`.
-* Haga que las clases implementen la interfaz `GeometricShape2D`.
-* Cree las clases de pruebas `TriangleTest` y `RectangleTest`.
-* Agregue pruebas para los métodos `getArea` y `getPerimeter`, asegurese de usar todos los constructores de las clases que se están probando.
-* Realice las implementaciones que necesite en las clases `Triangle` y `Rectangle` para que las pruebas que definio pasen.
+    @Test
+    public void shouldNorCreateCircleWithRadiusZero() {
 
-### Implementando `GeometricShape3D`
+        Exception e = assertThrows(ShapeException.class, () -> new Circle(0));
+        assertEquals(ShapeException.BAD_DIMENSION_SIDE, e.getMessage());
+    }
+```
 
-* Cree las clases `Pyramid` y `RectangleSolid`. 
-* Haga que las clases hereden de `Triangle` y `Rectangle` según corresponda.
-* Haga que las clases implementen la interfaz `GeometricShape3D`.
-* Cree las clases de pruebas `PyramidTest` y `RectangleSolidTest`.
-* Agregue pruebas para los métodos `getArea`, `getPerimeter`, `getVolume` y `getSuperficialArea`, asegurese de usar todos los constructores de las clases que se están probando.
-* Realice las implementaciones que necesite en las clases `Pyramid` y `RectangleSolid` para que las pruebas que definio pasen.
+Responda las siguientes preguntas:
 
-### `Cube`
+* ¿Cómo se lanza una excepción en JAVA?
+* ¿Cómo se propaga una excepción en JAVA?
+* ¿Cómo se captura una excepción en JAVA?
+* ¿Cuál es la diferencia en la implementación de las pruebas? ¿Validan lo mismo?
 
-* Cree la clase Cube.
-* Haga que la clase herede de `RectangleSolid`.
-* Cree la clase de pruebas `CubeTest`.
-* Agregue pruebas para los métodos `getArea`, `getPerimeter`, `getVolume` y `getSuperficialArea`, asegurese de usar todos los constructores de la clase `Cube`.
-* Todas las pruebas deberían pasar inmediatamente sin hacer modificaciones en la clase `Cube`.
+## Parte II - Implementando Excepciones
 
-## Parte III - Diseñando Interfaces
+* Asegúrese de expandir el comportamiento a lo largo de todas las clases del laboratorio anterior, `Circle`, `Rectangle`, `Triangle`, `Cylinder`, `RectangleSolid`, `Pyramid` y `Cube`.
+* Cree las pruebas necesarias para validar este comportamiento.
 
-* Diseñe la clase `Sphere`. Recuerde que es un solido que puede derivarse de la clase `Circle`.
-* Diseñe la interfaz `TrigonometricShape`, esta interfaz define que de un figura se pueden calcular:
-    * `getSen` - Obtener el seno.
-    * `getCos` - Obtener el coseno.
-    * `getTan` - Obtener la tangente.
-* Indique que la clase `Triangle` implementa esta interfaz.
-* NO modifique el código, solo exponga la propuesta del nuevo diseño.
-* En el archivo de SOLUTION.md cargue las imagenes de sus diseños.
+## Parte III - Implementando Excepciones en un contexto
 
-## Parte IV - Interfaces Implementando en un contexto
+Revise de nuevo las pruebas `ColsubsidioFundTest`, algunas de ellas cambiaron y ahora esperan que se lance una excepción de tipo `FamilyCompensationFundException`.
+Integre el código del laboratorio anterior:
 
-Las cajas de compensación son esenciales a la hora de hablar de un sistema de Nomina, para el caso del sistema `SabanaPayroll` vamos a contar con dos posibles opciones, `ColsubsidioFund` y `CompensarFund`, cada una de ellas es capaz de:
+* Modifique los métodos que sean necesarios para que dicha clase de pruebas funcione, no olvide propagar la excepción cuando corresponda.
+* Haga que el mismo comportamiento suceda para las clases `CompensarFund` y `CafamFund`.
 
-* Registrar a un empleado
-* Informar si un empleado esta registrado
-* Eliminar a un empleado
-* Imprimir la lista de los beneficios
+## Parte IV - Excepciones Integrando
 
-La única diferencia entre `ColsubsidioFund` y `CompensarFund` además de sus beneficios, es la forma en la que manejan el registro de los empleados inscritos, `ColsubsidioFund` basa su funcionalidad en un `HashMap`, no permite empleados que sean pagados por comision y `CompensarFund` basa su funcionalidad en un `List` y no permite empleados que sean pagados por horas. Revise con atención el código de dichas clases.
+Como ya habrá notado, al momento de cambiar el comportamiento de la interfaz de `IFamilyCompensationFund` para que lance excepciones, el compilador arrojará excepciones en distintos lugares, como en la clase `SabanaPayroll`.
 
-![](img/sabanapayroll-class-diagram-Fund.svg)
+* ¿Por qué el compilador muestra estos errores?.
+* ¿Qué debemos hacer para controlarlos?.
+* ¿Deben ser las excepciones en `SabanaPayroll` controladas o propagadas?.
+* NO modifique las pruebas de `SabanaPayrollTest`, pero haga todos los cambios que sean necesarios en la clase `SabanaPayroll` para que las pruebas pasen.
 
-* Lea el diagrama de clases propuesto.
-* El laboratorio tiene adjunto el código de las clases propuestas y las pruebas, integre el código del laboratorio anterior.
-* Lea las pruebas con atención.
-* Implemente el código necesario en la clase `ColsubsidioFund` para que las pruebas de la clase `ColsubsidioFundTest` pasen.
-* Cree la clase `CompensarFundTest` y agregue pruebas similares.
-* Implemente el código necesario en la clase `CompensarFund` para que las pruebas de la clase `CompensarFundTest` pasen.
-* Cree una tercera caja de compensación llamada `CafamFund` haga que esta implementación maneje el registro de empleados usando un `Set`, este permitirá el registro de todos los tipos de empleado, cree la clase `CafamFundTest` agregue los tests correspondientes e implemente el código necesario para que las pruebas pasen.   
+ ## Parte V
  
-## Parte V - Interfaces Integrando
-
-1. Use el diagrama de clases inicial para terminar de diseñar el sistema completo, incluya todo lo que considere necesario, atributos, métodos, relaciones.
-2. Diseñe el diagrama de secuencia para los métodos `assigneFamilyCompensation`.
-3. A la clase `SabanaNominaTest` que ya debe existir agregue diversas pruebas para los métodos anteriormente mencionados. (Revise las pruebas adjuntas como una base para las suyas.)
-4. Implemente los métodos y asegurese que las pruebas están bien diseñadas y se ejecutan de manera correcta. (Revise el código adjunto como una guía para su código)
-5. En el archivo de SOLUTION.md cargue las imagenes de sus diseños y evidencia de ejecución de pruebas.
-
-## Parte VI - Interfaces Diseñando en un contexto
-
-Diseñe el siguiente caso de negocio, no modifique el código, solo proponga el diseño. En el archivo de SOLUTION.md cargue las imagenes de sus diseños.
-
-La universidad ha decidido integrar el sistema de EPS's al sistema de nomina, para hacerlo comenzará con tres empresas, `CompensarEPS`, `SanitasEPS` y `ProteccionEPS`. Las tres compañías deben soportar el comportamiento de:
-
-* `registerEmployee`.
-* `isEmployeeRegistered`.
-* `deleteEmploye`.
-* `discountInabilityFee`.
-
+ * Cree una nueva excepción personalizada para alguna de las funcionalidades anteriores que hemos implementado e integrela, no olvide modificar las pruebas.
+ * En el archivo SOLUTION.md comente cuál fue su implementación.
+ 
  ## Condiciones
  
  * Todos los editables de los diagramas de este laboratorio se encuentran en la carpeta `diagrams`.
- * Cree un repositorio llamado APELLIDO1-APELLIDO2-APELLIDO3-SABANA-POOB-2021-1-LAB-ABSTRACT-CLASS en GitHub y suba a llí la solución del laboratiorio.
+ * Cree un repositorio llamado APELLIDO1-APELLIDO2-APELLIDO3-SABANA-POOB-2021-1-LAB-ABSTRACT-CLASS en GitHub y suba allí la solución del laboratorio.
  * Cree un archivo SOLUTION.md donde deberá documentar toda la solución del laboratorio. NO MODIFIQUE EL README.md.

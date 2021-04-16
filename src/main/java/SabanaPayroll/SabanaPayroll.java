@@ -145,7 +145,7 @@ public class SabanaPayroll {
      * @param fcf a compensation fund
      * @return if it was successful
      */
-    public boolean assigneFamilyCompesation(UUID uuid, IFamilyCompensationFund fcf) {
+    public boolean assigneFamilyCompesation(UUID uuid, IFamilyCompensationFund fcf) throws FamilyCompensationFundException {
         boolean result = false, exist = false;
         int i = 0;
 

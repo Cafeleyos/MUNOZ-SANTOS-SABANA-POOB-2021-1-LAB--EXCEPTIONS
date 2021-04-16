@@ -166,7 +166,7 @@ public class SabanaNominaTest {
     }
 
     @Test
-    public void shouldAddEmployeeToFamilyCompesationFund() {
+    public void shouldAddEmployeeToFamilyCompesationFund() throws FamilyCompensationFundException {
         assertTrue(sabanaPayRoll.assigneFamilyCompesation(s1.getId(), colFund));
         assertFalse(sabanaPayRoll.assigneFamilyCompesation(c2.getId(), colFund));
         assertTrue(sabanaPayRoll.assigneFamilyCompesation(e1h.getId(), colFund));

@@ -17,25 +17,20 @@ public class CompensarFund implements IFamilyCompensationFund {
      * @return if it was registered
      */
     @Override
-    public boolean registerEmployee(Employee employee) {
-        boolean result = true;
+    public boolean registerEmployee(Employee employee) throws FamilyCompensationFundException {
 
         if(employee.getEmployeeMethodPay().equals("hours")) {
-            result = false;
+            throw new FamilyCompensationFundException(FamilyCompensationFundException.EMPLOYEE_NOT_ALLOWED);
         }
         else{
             for(Employee e : registeredEmployees) {
                 if (e.getId() == employee.getId()) {
-                    result = false;
-                    break;
+                    throw new FamilyCompensationFundException(FamilyCompensationFundException.EMPLOYEE_REGISTERED);
                 }
             }
         }
-        if(result) {
-            registeredEmployees.add(employee);
-        }
 
-        return result;
+        return registeredEmployees.add(employee);
     }
 
     /**
@@ -44,7 +39,7 @@ public class CompensarFund implements IFamilyCompensationFund {
      * @return if it was removed
      */
     @Override
-    public boolean deleteEmployee(UUID id) {
+    public boolean deleteEmployee(UUID id) throws FamilyCompensationFundException {
         boolean result = false;
         int i = 0;
 
@@ -54,6 +49,9 @@ public class CompensarFund implements IFamilyCompensationFund {
                 result = true;
                 break;
             }
+        }
+        if(!result) {
+            throw new FamilyCompensationFundException(FamilyCompensationFundException.EMPLOYEE_IS_NOT_REGISTERED);
         }
 
         return result;

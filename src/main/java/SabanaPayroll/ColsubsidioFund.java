@@ -17,17 +17,16 @@ public class ColsubsidioFund implements IFamilyCompensationFund {
      * @return if it was registered
      */
     @Override
-    public boolean registerEmployee(Employee employee) {
+    public boolean registerEmployee(Employee employee) throws FamilyCompensationFundException {
         boolean result = true;
 
         if(employee.getEmployeeMethodPay().equals("commission")) {
-            result = false;
+            throw new FamilyCompensationFundException(FamilyCompensationFundException.EMPLOYEE_NOT_ALLOWED);
         }
         else{
             for(Employee e : registeredEmployees.values()) {
                 if (e.getId() == employee.getId()) {
-                    result = false;
-                    break;
+                    throw new FamilyCompensationFundException(FamilyCompensationFundException.EMPLOYEE_REGISTERED);
                 }
             }
         }
@@ -43,12 +42,15 @@ public class ColsubsidioFund implements IFamilyCompensationFund {
      * @return if it was removed
      */
     @Override
-    public boolean deleteEmployee(UUID id) {
+    public boolean deleteEmployee(UUID id) throws FamilyCompensationFundException {
         boolean result = false;
         Employee e;
 
         e = registeredEmployees.get(id);
         result = registeredEmployees.remove(id, e);
+        if(!result) {
+            throw new FamilyCompensationFundException(FamilyCompensationFundException.EMPLOYEE_IS_NOT_REGISTERED);
+        }
 
         return result;
     }
