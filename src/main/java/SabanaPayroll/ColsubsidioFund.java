@@ -64,7 +64,7 @@ public class ColsubsidioFund implements IFamilyCompensationFund {
     public boolean isEmployeeRegistered(UUID id) {
         boolean result = false;
 
-       result = registeredEmployees.containsKey(id);
+        result = registeredEmployees.containsKey(id);
 
         return result;
     }
