@@ -14,7 +14,7 @@ public class CheckingTest {
     }
 
     @Test
-    public void shouldDepositAmount() throws BankAccountException {
+    public void shouldDepositAmount() {
         Checking account = new Checking();
         boolean result = account.deposit(10000);
 
@@ -23,7 +23,7 @@ public class CheckingTest {
     }
 
     @Test
-    public void shouldNotDepositAmount() throws BankAccountException {
+    public void shouldNotDepositAmount() {
         Checking account = new Checking();
 
         assertFalse(account.deposit(4000));
@@ -51,7 +51,7 @@ public class CheckingTest {
     }
 
     @Test
-    public void shouldKeepBalance() throws BankAccountException {
+    public void shouldKeepBalance() {
         Checking account = new Checking();
 
         assertTrue(account.deposit(11000)); //6000
@@ -75,7 +75,8 @@ public class CheckingTest {
         assertTrue(account.withdraw(3000));
 
         assertTrue(Double.compare(1988.0,account.getBalance())==0);
-        assertFalse(account.withdraw(1988));
+        Exception e = assertThrows(BankAccountException.class, () -> account.withdraw(500000));
+        assertEquals(BankAccountException.LOW_AMOUNT_OF_MONEY, e.getMessage());
         assertTrue(account.withdraw(1980));
         assertTrue(Double.compare(0.07999999999992724,account.getBalance())==0);
 
