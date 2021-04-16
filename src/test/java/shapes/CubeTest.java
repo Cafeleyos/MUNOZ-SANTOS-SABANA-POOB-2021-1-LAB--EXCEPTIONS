@@ -1,6 +1,7 @@
 package shapes;
 
 import Shapes.Cube;
+import Shapes.ShapeException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -15,11 +16,16 @@ public class CubeTest {
 
     @BeforeAll
     public static void setUp() {
-        c1 = new Cube();
-        c2 = new Cube("red");
-        c3 = new Cube(5.0);
-        c4 = new Cube(2.0, "yellow");
-
+        try {
+            c1 = new Cube();
+            c2 = new Cube("red");
+            c3 = new Cube(5.0);
+            c4 = new Cube(2.0, "yellow");
+        }
+        catch (ShapeException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Test

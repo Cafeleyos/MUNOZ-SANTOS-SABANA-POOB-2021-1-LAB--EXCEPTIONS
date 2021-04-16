@@ -16,14 +16,18 @@ public class Cube extends RectangleSolid {
     /**
      *  Constructor for specifying the side of the cube
      */
-    public Cube(double side) {
+    public Cube(double side) throws ShapeException {
         super(side, side, side);
+        if (side<=0)
+            throw new ShapeException(ShapeException.BAD_DIMENSION_SIDE);
     }
     /**
      *  Constructor for specifying the side and color of the cube
      */
-    public Cube(double side, String color) {
+    public Cube(double side, String color) throws ShapeException {
         super(side, side, side, color);
+        if (side<=0)
+            throw new ShapeException(ShapeException.BAD_DIMENSION_SIDE);
     }
 
     @Override

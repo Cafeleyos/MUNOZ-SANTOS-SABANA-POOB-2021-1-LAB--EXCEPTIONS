@@ -1,10 +1,11 @@
 package shapes;
 
-import Shapes.Circle;
+import Shapes.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CircleTest {
 
@@ -15,10 +16,15 @@ public class CircleTest {
 
     @BeforeAll
     public static void setUp() {
-        c1 = new Circle(10);
-        c2 = new Circle(14.5);
-        c3 = new Circle("red", 23.5);
-        c4 = new Circle();
+        try {
+            c1 = new Circle(10);
+            c2 = new Circle(14.5);
+            c3 = new Circle("red", 23.5);
+            c4 = new Circle();
+        } catch (ShapeException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -55,4 +61,22 @@ public class CircleTest {
         assertEquals("This is a Circle with color red and radius 23.5", c3.toString());
         assertEquals("This is a Circle with color NONE and radius 1", c4.toString());
     }
+
+    @Test
+    public void shouldNotCreateCircleWithRadiusNegative() {
+
+        try {
+            new Circle(-1);
+        } catch (ShapeException e) {
+            assertEquals(ShapeException.BAD_DIMENSION_SIDE, e.getMessage());
+        }
+    }
+
+    @Test
+    public void shouldNorCreateCircleWithRadiusZero() {
+
+        Exception e = assertThrows(ShapeException.class, () -> new Circle(0));
+        assertEquals(ShapeException.BAD_DIMENSION_SIDE, e.getMessage());
+    }
+
 }

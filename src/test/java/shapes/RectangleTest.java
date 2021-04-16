@@ -1,10 +1,13 @@
 package shapes;
 
+import Shapes.Cylinder;
 import Shapes.Rectangle;
+import Shapes.ShapeException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RectangleTest {
 
@@ -15,10 +18,16 @@ public class RectangleTest {
 
     @BeforeAll
     public static void setUp() {
-        r1 = new Rectangle();
-        r2 = new Rectangle("red");
-        r3 = new Rectangle("red", 5.1, 10);
-        r4 = new Rectangle(20, 5);
+        try {
+            r1 = new Rectangle();
+            r2 = new Rectangle("red");
+            r3 = new Rectangle("red", 5.1, 10);
+            r4 = new Rectangle(20, 5);
+        }
+        catch (ShapeException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -52,4 +61,32 @@ public class RectangleTest {
         assertEquals("This is a Rectangle with color red, width 5.1 and length 10", r3.toString());
         assertEquals("This is a Rectangle with color NONE, width 20 and length 5", r4.toString());
     }
+    @Test
+    public void shouldNotCreateRectangleWithWidthNegative() {
+        try {
+            new Rectangle(-1, 2);
+        } catch (ShapeException e) {
+            assertEquals(ShapeException.BAD_DIMENSION_SIDE, e.getMessage());
+        }
+    }
+    @Test
+    public void shouldNotCreateRectangleWithLengthNegative() {
+        try {
+            new Rectangle(3, -2);
+        } catch (ShapeException e) {
+            assertEquals(ShapeException.BAD_DIMENSION_SIDE, e.getMessage());
+        }
+    }
+
+    @Test
+    public void shouldNotCreateRectangleWithLength0() {
+        Exception e = assertThrows(ShapeException.class,() -> new Rectangle(5,0));
+        assertEquals(ShapeException.BAD_DIMENSION_SIDE,e.getMessage());
+    }
+    @Test
+    public void shouldNotCreateRectangleWithWidth0() {
+        Exception e = assertThrows(ShapeException.class,() -> new Rectangle(0,6));
+        assertEquals(ShapeException.BAD_DIMENSION_SIDE,e.getMessage());
+    }
 }
+

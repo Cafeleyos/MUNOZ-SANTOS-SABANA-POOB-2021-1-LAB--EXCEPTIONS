@@ -103,4 +103,5 @@ public class ColsubsidioFundTest {
         String benefits = colsubsidioFund.printBenefits();
         assertNotNull(benefits);
     }
+
 }

@@ -1,11 +1,12 @@
 package shapes;
 
 import Shapes.Cylinder;
+import Shapes.ShapeException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class CylinderTest {
 
@@ -16,10 +17,15 @@ public class CylinderTest {
 
     @BeforeAll
     public static void setUp() {
-        c1 = new Cylinder();
-        c2 = new Cylinder(14.5, 20.5);
-        c3 = new Cylinder("red", 23.5, 42.1);
-        c4 = new Cylinder(1.2,103);
+        try {
+            c1 = new Cylinder();
+            c2 = new Cylinder(14.5, 20.5);
+            c3 = new Cylinder("red", 23.5, 42.1);
+            c4 = new Cylinder(1.2, 103);
+        } catch (ShapeException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -69,5 +75,32 @@ public class CylinderTest {
         assertTrue(c2.toStringGeometricShape2D().contains("This is a Cylinder"));
         assertTrue(c3.toStringGeometricShape2D().contains("This is a Cylinder"));
         assertTrue(c4.toStringGeometricShape2D().contains("This is a Cylinder"));
+    }
+
+    @Test
+    public void shouldNotCreateCylinderWithRadiusNegative() {
+        try {
+            new Cylinder(-1, 2);
+        } catch (ShapeException e) {
+            assertEquals(ShapeException.BAD_DIMENSION_SIDE, e.getMessage());
+        }
+    }
+    @Test
+    public void shouldNotCreateCylinderWithHeightNegative() {
+        try {
+            new Cylinder(5, -2);
+        } catch (ShapeException e) {
+            assertEquals(ShapeException.BAD_DIMENSION_SIDE, e.getMessage());
+        }
+    }
+    @Test
+    public void shouldNotCreateCylinderWithHeight0() {
+        Exception e = assertThrows(ShapeException.class,() -> new Cylinder(5,0));
+        assertEquals(ShapeException.BAD_DIMENSION_SIDE,e.getMessage());
+    }
+    @Test
+    public void shouldNotCreateCylinderWithRadius0() {
+        Exception e = assertThrows(ShapeException.class,() -> new Cylinder(0,6));
+        assertEquals(ShapeException.BAD_DIMENSION_SIDE,e.getMessage());
     }
 }

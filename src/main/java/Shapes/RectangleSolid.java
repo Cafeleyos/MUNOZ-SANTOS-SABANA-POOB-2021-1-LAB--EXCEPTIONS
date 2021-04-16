@@ -21,15 +21,19 @@ public class RectangleSolid extends Rectangle implements GeometricShape3D {
     /**
      *  Constructor for specifying the sides of the rectangular prism
      */
-    public RectangleSolid(double width, double length, double depth) {
+    public RectangleSolid(double width, double length, double depth) throws ShapeException {
         super(width, length);
+        if (depth<=0)
+            throw new ShapeException(ShapeException.BAD_DIMENSION_SIDE);
         this.depth = depth;
     }
     /**
      *  Constructor for specifying the sides and color of the rectangular prism
      */
-    public RectangleSolid(double width, double length, double depth, String color) {
+    public RectangleSolid(double width, double length, double depth, String color) throws ShapeException {
         super(color, width, length);
+        if (depth<=0)
+            throw new ShapeException(ShapeException.BAD_DIMENSION_SIDE);
             this.depth = depth;
     }
 

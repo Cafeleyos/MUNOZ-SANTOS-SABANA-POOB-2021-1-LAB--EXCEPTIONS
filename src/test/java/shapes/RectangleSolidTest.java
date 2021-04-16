@@ -1,10 +1,13 @@
 package shapes;
 
+import Shapes.Rectangle;
 import Shapes.RectangleSolid;
+import Shapes.ShapeException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RectangleSolidTest {
 
@@ -15,11 +18,16 @@ public class RectangleSolidTest {
 
     @BeforeAll
     public static void setUp() {
-        c1 = new RectangleSolid();
-        c2 = new RectangleSolid("red");
-        c3 = new RectangleSolid(5.0,6.0,10);
-        c4 = new RectangleSolid(10,15,5.0,"yellow");
-
+        try {
+            c1 = new RectangleSolid();
+            c2 = new RectangleSolid("red");
+            c3 = new RectangleSolid(5.0, 6.0, 10);
+            c4 = new RectangleSolid(10, 15, 5.0, "yellow");
+        }
+        catch (ShapeException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -59,6 +67,23 @@ public class RectangleSolidTest {
         assertEquals(550.0, Round(c4.getSuperficialArea()));
 
     }
+    @Test
+    public void shouldNotCreateSolidRectangleWithDepthNegative() {
+        try {
+            new RectangleSolid(1, 2,-2);
+        } catch (ShapeException e) {
+            assertEquals(ShapeException.BAD_DIMENSION_SIDE, e.getMessage());
+        }
+    }
+    @Test
+    public void shouldNotCreateSolidRectangleWithDepth0() {
+        try {
+            new RectangleSolid(1,3, 0);
+        } catch (ShapeException e) {
+            assertEquals(ShapeException.BAD_DIMENSION_SIDE, e.getMessage());
+        }
+    }
+
 
     public Double Round(double number) {
         return Math.round(number*100.0)/100.0;
