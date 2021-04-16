@@ -145,7 +145,7 @@ public class SabanaPayroll {
      * @param fcf a compensation fund
      * @return if it was successful
      */
-    public boolean assigneFamilyCompesation(UUID uuid, IFamilyCompensationFund fcf) throws FamilyCompensationFundException {
+    public boolean assigneFamilyCompesation(UUID uuid, IFamilyCompensationFund fcf) {
         boolean result = false, exist = false;
         int i = 0;
 
@@ -156,7 +156,11 @@ public class SabanaPayroll {
                     exist = d.getEmployees().get(i).addCompesationFund(fcf);
 
                     if(exist) {
-                        result = fcf.registerEmployee(d.getEmployees().get(i));
+                        try {
+                            result = fcf.registerEmployee(d.getEmployees().get(i));
+                        } catch (FamilyCompensationFundException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 }
