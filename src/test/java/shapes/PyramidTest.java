@@ -1,11 +1,13 @@
 package shapes;
 
 import Shapes.Pyramid;
+import Shapes.Rectangle;
+import Shapes.ShapeException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PyramidTest {
 
@@ -16,11 +18,16 @@ public class PyramidTest {
 
     @BeforeAll
     public static void setUp() {
-        c1 = new Pyramid();
-        c2 = new Pyramid("red");
-        c3 = new Pyramid(5.0,5.0,5.0,20.0);
-        c4 = new Pyramid(3.0,4.0,5.0,40,"blue");
-
+        try {
+            c1 = new Pyramid();
+            c2 = new Pyramid("red");
+            c3 = new Pyramid(5.0, 5.0, 5.0, 20.0);
+            c4 = new Pyramid(3.0, 4.0, 5.0, 40, "blue");
+        }
+        catch (ShapeException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -57,11 +64,22 @@ public class PyramidTest {
         assertEquals(1.9, Round(c2.getSuperficialArea()));
         assertEquals(160.8, Round(c3.getSuperficialArea()));
         assertEquals(246.0, Round(c4.getSuperficialArea()));
-
     }
 
-    public Double Round(double number) {
+    @Test
+    public void shouldNotCreatePyramidWithHeight0() {
+        Exception e = assertThrows(ShapeException.class,() -> new Pyramid(3,4,5,0));
+        assertEquals(ShapeException.BAD_DIMENSION_SIDE,e.getMessage());
+    }
+    @Test
+    public void shouldNotCreatePyramidWithNegativeHeight() {
+        Exception e = assertThrows(ShapeException.class, () -> new Pyramid(3, 4, 5, -1));
+        assertEquals(ShapeException.BAD_DIMENSION_SIDE, e.getMessage());
+    }
+
+    public Double Round (double number) {
         return Math.round(number*10.0)/10.0;
     }
+
 }
 

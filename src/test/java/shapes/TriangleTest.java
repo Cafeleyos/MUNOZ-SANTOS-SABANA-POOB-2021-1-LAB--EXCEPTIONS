@@ -1,6 +1,8 @@
 package shapes;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import Shapes.Rectangle;
+import Shapes.ShapeException;
 import Shapes.Triangle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,12 +20,18 @@ import org.junit.jupiter.api.Test;
 
     @BeforeAll
     public static void setUp() {
-        t = new Triangle();
-        tColor = new Triangle("Red");
-        tIsosceles = new Triangle(5.0, 5.0, 2.0);
-        tEquilateral = new Triangle(2.0, 2.0, 2.0);
-        tGeneric = new Triangle(3.0, 4.0, 5.0);
-        tColor_Equilateral = new Triangle("red", 2.0, 2.0, 2.0);
+        try {
+            t = new Triangle();
+            tColor = new Triangle("Red");
+            tIsosceles = new Triangle(5.0, 5.0, 2.0);
+            tEquilateral = new Triangle(2.0, 2.0, 2.0);
+            tGeneric = new Triangle(3.0, 4.0, 5.0);
+            tColor_Equilateral = new Triangle("red", 2.0, 2.0, 2.0);
+        }
+        catch (ShapeException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -79,5 +87,34 @@ import org.junit.jupiter.api.Test;
         Assertions.assertFalse(t.isIsosceles());
         Assertions.assertFalse(tColor_Equilateral.isIsosceles());
     }
+
+    @Test
+    public void shouldNotCreateTriangleWithSideEqualTo0() {
+        try {
+            new Triangle(0, 2,2);
+        } catch (ShapeException e) {
+            assertEquals(ShapeException.BAD_DIMENSION_SIDE, e.getMessage());
+        }
+    }
+
+    @Test
+    public void shouldNotCreateTriangleWithNegativeSide() {
+        try {
+            new Triangle(-1, 2,2);
+        } catch (ShapeException e) {
+            assertEquals(ShapeException.BAD_DIMENSION_SIDE, e.getMessage());
+        }
+    }
+
+    @Test
+    public void shouldNotCreateTriangleWithIncoherentSides() {
+
+        try {
+            new Triangle(2, 2,100);
+        } catch (ShapeException e) {
+                assertEquals(ShapeException.INCOHERENT_SIDES, e.getMessage());
+        }
+    }
+
 
 }

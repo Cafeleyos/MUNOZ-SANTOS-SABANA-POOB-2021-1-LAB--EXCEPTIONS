@@ -29,12 +29,17 @@ public class Triangle extends Shape implements GeometricShape2D{
      * @param side2
      * @param side3
      */
-    public Triangle (double side1, double side2, double side3) {
-        if (theTriangleIsValid(side1,side2,side3)) {
-            this.side1 = side1;
-            this.side2 = side2;
-            this.side3 = side3;
+    public Triangle (double side1, double side2, double side3) throws ShapeException {
+        if (side1<= 0 || side2<= 0 || side3<= 0) {
+            throw new ShapeException(ShapeException.BAD_DIMENSION_SIDE);
         }
+        if (!theTriangleIsValid(side1,side2,side3)) {
+            throw new ShapeException(ShapeException.INCOHERENT_SIDES);
+        }
+        this.side1 = side1;
+        this.side2 = side2;
+        this.side3 = side3;
+
     }
 
     /**
@@ -44,13 +49,18 @@ public class Triangle extends Shape implements GeometricShape2D{
      * @param side2
      * @param side3
      */
-    public Triangle (String color,double side1, double side2, double side3){
+    public Triangle (String color,double side1, double side2, double side3) throws ShapeException{
         super(color);
-        if (theTriangleIsValid(side1,side2,side3)) {
-            this.side1 = side1;
-            this.side2 = side2;
-            this.side3 = side3;
+        if (side1<= 0 || side2<= 0 || side3<= 0) {
+            throw new ShapeException(ShapeException.BAD_DIMENSION_SIDE);
         }
+        if (!theTriangleIsValid(side1,side2,side3)) {
+            throw new ShapeException(ShapeException.INCOHERENT_SIDES);
+        }
+        this.side1 = side1;
+        this.side2 = side2;
+        this.side3 = side3;
+
     }
 
     /**
@@ -115,6 +125,7 @@ public class Triangle extends Shape implements GeometricShape2D{
                 ,side2
                 ,side3);
     }
+
 
     public double[] getSides() {
         double list[] = new double[3];

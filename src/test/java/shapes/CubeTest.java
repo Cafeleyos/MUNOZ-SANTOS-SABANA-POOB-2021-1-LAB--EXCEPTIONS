@@ -1,11 +1,13 @@
 package shapes;
 
 import Shapes.Cube;
+import Shapes.Rectangle;
 import Shapes.ShapeException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CubeTest {
 
@@ -64,6 +66,23 @@ public class CubeTest {
         assertEquals(150.0, Round(c3.getSuperficialArea()));
         assertEquals(24.0, Round(c4.getSuperficialArea()));
 
+    }
+
+    @Test
+    public void shouldNotCreateCubeWithNegativeSide() {
+        try {
+            new Cube(-1 );
+        } catch (ShapeException e) {
+            assertEquals(ShapeException.BAD_DIMENSION_SIDE, e.getMessage());
+        }
+    }
+    @Test
+    public void shouldNotCreateCubeWithSideEqual0() {
+        try {
+            new Cube(0, "red");
+        } catch (ShapeException e) {
+            assertEquals(ShapeException.BAD_DIMENSION_SIDE, e.getMessage());
+        }
     }
 
     public Double Round(double number) {
